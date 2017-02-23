@@ -112,6 +112,59 @@
 }
 
 
+- (void)fitness_deleteSteps:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback
+{
+    NSDate *startDate = [RCTAppleHealthKit dateFromOptions:input key:@"startDate" withDefault:nil];
+    NSDate *endDate = [RCTAppleHealthKit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
+
+    if(startDate == nil || endDate == nil){
+        callback(@[RCTMakeError(@"startDate and endDate are required in options", nil, nil)]);
+        return;
+    }
+
+    HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
+
+    // the predicate used to execute the query
+    NSPredicate *queryPredicate = [HKSampleQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionNone];
+
+    // prepare the query
+    HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType:type predicate:queryPredicate limit:100 sortDescriptors:nil resultsHandler:^(HKSampleQuery * _Nonnull query, NSArray<__kindof HKSample *> * _Nullable results, NSError * _Nullable error) {
+
+        if (error) {
+
+            NSLog(@"Error: %@", error.description);
+
+            callback(@[RCTMakeError(@"An error occured deleting the step count sample", error.description, nil)]);
+
+        } else {
+
+            // now that we retrieved the samples, we can delete it/them
+            [self.healthStore deleteObject:[results firstObject] withCompletion:^(BOOL success, NSError * _Nullable error) {
+
+                if (success) {
+
+                    NSLog(@"Successfully deleted entry from health kit");
+
+                    callback(@[[NSNull null], @"success"]);
+
+                } else {
+
+                    NSLog(@"Error: %@", error.description);
+
+                    callback(@[RCTMakeError(@"An error occured deleting the step count sample", error.description, nil)]);
+
+
+                }
+            }];
+
+        }
+    }];
+
+    [self.healthStore executeQuery:query];
+
+}
+
+
 - (void)fitness_initializeStepEventObserver:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback
 {
     HKSampleType *sampleType =

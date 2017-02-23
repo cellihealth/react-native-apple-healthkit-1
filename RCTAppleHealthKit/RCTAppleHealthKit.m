@@ -119,6 +119,11 @@ RCT_EXPORT_METHOD(saveSteps:(NSDictionary *)input callback:(RCTResponseSenderBlo
     [self fitness_saveSteps:input callback:callback];
 }
 
+RCT_EXPORT_METHOD(deleteSteps:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
+{
+    [self fitness_deleteSteps:input callback:callback];
+}
+
 RCT_EXPORT_METHOD(getDistanceWalkingRunning:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
 {
     [self fitness_getDistanceWalkingRunningOnDay:input callback:callback];
