@@ -23,6 +23,7 @@ A React Native bridge module for interacting with [Apple HealthKit] data.
       * [getDailyStepCountSamples](#getdailystepcountsamples)
       * [initStepCountObserver](#initstepcountobserver)
       * [saveSteps](#savesteps)
+      * [deleteSteps](#deletesteps)
       * [getDistanceWalkingRunning](#getdistancewalkingrunning)
       * [getDistanceCycling](#getdistancecycling)
       * [getFlightsClimbed](#getflightsclimbed)
@@ -441,6 +442,34 @@ AppleHealthKit.saveSteps(options, (err, res) => {
 ```
 
 ___
+
+
+___
+
+#### **`deleteSteps`**
+Delete steps within time period.
+
+Function to delete steps within specified time period. Important this method can delete only steps written by your app. (Apple policy)
+
+`deleteSteps` accepts an options object containing required *`startDate: ISO8601Timestamp`*, and *`endDate: ISO8601Timestamp`*.
+```javascript
+// startDate and endDate are 30 minutes apart.
+let options = {
+	startDate: (new Date(2016,6,2,6,0,0)).toISOString(),
+	endDate: (new Date(2016,6,2,6,30,0)).toISOString()
+};
+```
+
+```javascript
+AppleHealthKit.deleteSteps(options, (err, result) => {
+            console.log("ERROR DELETING STEPS", err);
+            console.log("SUCCESSFULLY DELETED STEPS", result);
+});
+
+```
+
+___
+
 
 #### **`getDistanceWalkingRunning`**
 Get the total distance walking/running on a specific day.
