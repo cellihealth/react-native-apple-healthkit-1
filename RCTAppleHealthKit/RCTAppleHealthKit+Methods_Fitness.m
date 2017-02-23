@@ -11,10 +11,10 @@
 #import "RCTAppleHealthKit+Utils.h"
 
 #if __has_include(<React/RCTAssert.h>)
-#import <React/RCTBridge.h>
+#import <React/RCTBridgeModule.h>
 #import <React/RCTEventDispatcher.h>
 #else
-#import "RCTBridge.h"
+#import "RCTBridgeModule.h"
 #import "RCTEventDispatcher.h"
 #endif
 
