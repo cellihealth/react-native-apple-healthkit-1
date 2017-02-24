@@ -99,6 +99,60 @@
 }
 
 
+- (void)body_deleteWeight:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback
+{
+    NSDate *startDate = [RCTAppleHealthKit dateFromOptions:input key:@"startDate" withDefault:nil];
+    NSDate *endDate = [RCTAppleHealthKit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
+    
+    if(startDate == nil || endDate == nil){
+        callback(@[RCTMakeError(@"startDate and endDate are required in options", nil, nil)]);
+        return;
+    }
+    
+    HKQuantityType *type = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
+    
+    // the predicate used to execute the query
+    NSPredicate *queryPredicate = [HKSampleQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionNone];
+    
+    // prepare the query
+    HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType:type predicate:queryPredicate limit:100 sortDescriptors:nil resultsHandler:^(HKSampleQuery * _Nonnull query, NSArray<__kindof HKSample *> * _Nullable results, NSError * _Nullable error) {
+        
+        if (error) {
+            
+            NSLog(@"Error: %@", error.description);
+            
+            callback(@[RCTMakeError(@"An error occured deleting the weights sample", error.description, nil)]);
+            
+        } else {
+            
+            // now that we retrieved the samples, we can delete it/them
+            [self.healthStore deleteObject:[results firstObject] withCompletion:^(BOOL success, NSError * _Nullable error) {
+                
+                if (success) {
+                    
+                    NSLog(@"Successfully deleted entries from health kit");
+                    
+                    callback(@[[NSNull null], @"success"]);
+                    
+                } else {
+                    
+                    NSLog(@"Error: %@", error.description);
+                    
+                    callback(@[RCTMakeError(@"An error occured deleting the weights sample", error.description, nil)]);
+                    
+                    
+                }
+            }];
+            
+        }
+    }];
+    
+    [self.healthStore executeQuery:query];
+    
+}
+
+
+
 - (void)body_getLatestBodyMassIndex:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback
 {
     HKQuantityType *bmiType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMassIndex];

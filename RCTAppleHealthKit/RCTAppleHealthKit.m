@@ -69,6 +69,11 @@ RCT_EXPORT_METHOD(saveWeight:(NSDictionary *)input callback:(RCTResponseSenderBl
     [self body_saveWeight:input callback:callback];
 }
 
+RCT_EXPORT_METHOD(deleteWeight:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
+{
+    [self body_deleteWeight:input callback:callback];
+}
+
 RCT_EXPORT_METHOD(getLatestHeight:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
 {
     [self body_getLatestHeight:input callback:callback];
