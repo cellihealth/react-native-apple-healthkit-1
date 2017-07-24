@@ -269,8 +269,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)/../../react-native/React/**",
-					"$(SRCROOT)/../../../React/**",
+					"$(SRCROOT)/../../react-native/React/**/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -282,8 +283,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)/../../react-native/React/**",
-					"$(SRCROOT)/../../../React/**",
+					"$(SRCROOT)/../../react-native/React/**/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
