@@ -48,14 +48,14 @@
 
 - (void)characteristic_getDateOfBirth:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback {
     NSError *error;
-    NSDate *dob = [self.healthStore dateOfBirthWithError:&error];
+    NSDateComponents *dobc = [self.healthStore dateOfBirthComponentsWithError:&error];
 
     if(error != nil){
         NSLog(@"error getting date of birth: %@", error);
         callback(@[RCTMakeError(@"error getting date of birth", error, nil)]);
         return;
     }
-    if(dob == nil) {
+    if(dobc == nil) {
         NSDictionary *response = @{
                                    @"value" : [NSNull null],
                                    @"age" : [NSNull null]
@@ -64,6 +64,7 @@
         return;
     }
 
+    NSDate *dob = [dobc date];
     NSString *dobString = [RCTAppleHealthKit buildISO8601StringFromDate:dob];
 
     NSDate *now = [NSDate date];
