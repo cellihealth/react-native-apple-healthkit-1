@@ -119,6 +119,12 @@ RCT_EXPORT_METHOD(getDailyStepCountSamples:(NSDictionary *)input callback:(RCTRe
     [self fitness_getDailyStepSamples:input callback:callback];
 }
 
+// [Nanaz] getDailyStepCountSamples2 with HKSample Query and Type
+RCT_EXPORT_METHOD(getDailyStepCountSamples2:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
+{
+    [self fitness_getDailyStepSamples2:input callback:callback];
+}
+
 RCT_EXPORT_METHOD(saveSteps:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
 {
     [self fitness_saveSteps:input callback:callback];

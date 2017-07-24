@@ -12,6 +12,10 @@
 
 - (void)fitness_getStepCountOnDay:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback;
 - (void)fitness_getDailyStepSamples:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback;
+
+// [Nanaz] fitness_getDailyStepSamples2 with HKSample Query and Type
+- (void)fitness_getDailyStepSamples2:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback;
+
 - (void)fitness_saveSteps:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback;
 - (void)fitness_deleteSteps:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback;
 - (void)fitness_initializeStepEventObserver:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback;

@@ -442,4 +442,104 @@
     [self.healthStore executeQuery:query];
 }
 
+// [Nanaz] fetchCumulativeSumStatisticsCollection with HKSampleQuery to getting the device info
+- (void)fetchCumulativeSumStatisticsCollection:(HKSampleType *)sampleType
+                                     predicate:(NSPredicate *)predicate
+                                          unit:(HKUnit *)unit
+                                     startDate:(NSDate *)startDate
+                                       endDate:(NSDate *)endDate
+                                     ascending:(BOOL)asc
+                                         limit:(NSUInteger)lim
+                                    completion:(void (^)(NSArray *, NSError *))completionHandler {
+
+    NSLog(@"fetchCumulativeSumStatisticsCollection with HKSampleQuery");
+
+    NSString *endKey = HKSampleSortIdentifierEndDate;
+    NSSortDescriptor *endDateSort = [NSSortDescriptor sortDescriptorWithKey:endKey ascending:asc];
+
+    HKSampleQuery *query = [[HKSampleQuery alloc] initWithSampleType:sampleType predicate:predicate limit:lim sortDescriptors:@[endDateSort] resultsHandler:^(HKSampleQuery *sampleQuery, NSArray *results, NSError *error) {
+        if (error) {
+            // Perform proper error handling here
+            NSLog(@"*** An error occurred while calculating the statistics: %@ ***", error.localizedDescription);
+        }
+
+        NSMutableArray *data = [[NSMutableArray alloc] initWithCapacity:results.count];
+        NSMutableDictionary *elema = [NSMutableDictionary dictionary];
+
+        for (HKSample *sample in results) {
+            NSDate *startDate = sample.startDate;
+            NSDate *endDate = sample.endDate;
+
+            NSDateFormatter *format = [[NSDateFormatter alloc] init];
+            [format setDateFormat:@"yyyy-MM-dd"];
+            NSString *key = [format stringFromDate:sample.startDate];
+
+            NSString *startDateString = [RCTAppleHealthKit buildISO8601StringFromDate:startDate];
+            NSString *endDateString = [RCTAppleHealthKit buildISO8601StringFromDate:endDate];
+//
+//
+//            NSMutableDictionary *elem = [NSMutableDictionary dictionary];
+//
+//            elem[@"startDate"] = startDateString;
+//            elem[@"endDate"] = endDateString;
+//            elem[@"sourceName"] = sample.sourceRevision.source.name;
+//            elem[@"identifier"] = sample.sourceRevision.source.bundleIdentifier;
+//            elem[@"device"] = sample.device.name;
+//
+//            HKQuantitySample *qsample = (HKQuantitySample *) sample;
+//            [elem setValue:@([qsample.quantity doubleValueForUnit:unit]) forKey:@"value"];
+//
+//            [data addObject:elem];
+
+            if(!elema[key]){
+                [elema setObject:[NSMutableDictionary dictionary] forKey:key];
+            }
+
+            NSString *key2 = [NSString alloc];
+
+            if(sample.device.name){
+                key2 = sample.device.name;
+            }else{
+                key2 = [sample.sourceRevision.source.name stringByReplacingOccurrencesOfString:@" " withString:@""];
+            }
+
+            if(!elema[key][key2]){
+                [elema[key] setObject:[NSMutableDictionary dictionary] forKey:key2];
+                elema[key][key2][@"date"] = key;
+                elema[key][key2][@"sourceName"] = sample.sourceRevision.source.name;
+                elema[key][key2][@"identifier"] = sample.sourceRevision.source.bundleIdentifier;
+                elema[key][key2][@"device"] = key2;
+                elema[key][key2][@"value"] = @"0";
+            }
+
+            HKQuantitySample *qsample = (HKQuantitySample *) sample;
+
+            [elema[key][key2] setValue:@([qsample.quantity doubleValueForUnit:unit]+[elema[key][key2][@"value"] doubleValue]) forKey:@"value"];
+        }
+
+        for(NSString *key in elema){
+            for(NSString *key2 in elema[key]){
+                [data addObject:elema[key][key2]];
+            }
+        }
+
+        NSLog(@"data: %@", data);
+
+        if(asc == false) {
+            [RCTAppleHealthKit reverseNSMutableArray:data];
+        }
+
+        if(lim > 0) {
+            NSArray* slicedArray = [data subarrayWithRange:NSMakeRange(0, lim)];
+            NSError *err;
+            completionHandler(slicedArray, err);
+        } else {
+            NSError *err;
+            completionHandler(data, err);
+        }
+
+    }];
+    [self.healthStore executeQuery:query];
+}
+
 @end
