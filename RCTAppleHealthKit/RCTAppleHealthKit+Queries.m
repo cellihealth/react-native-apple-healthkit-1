@@ -452,7 +452,7 @@
                                          limit:(NSUInteger)lim
                                     completion:(void (^)(NSArray *, NSError *))completionHandler {
 
-    NSLog(@"fetchCumulativeSumStatisticsCollection with HKSampleQuery");
+    NSLog(@"fetchCumulativeSumStatisticsCollection with HKSampleQuery startDate: %@", startDate);
 
     NSString *endKey = HKSampleSortIdentifierEndDate;
     NSSortDescriptor *endDateSort = [NSSortDescriptor sortDescriptorWithKey:endKey ascending:asc];
@@ -474,8 +474,8 @@
             [format setDateFormat:@"yyyy-MM-dd"];
             NSString *key = [format stringFromDate:sample.startDate];
 
-            NSString *startDateString = [RCTAppleHealthKit buildISO8601StringFromDate:startDate];
-            NSString *endDateString = [RCTAppleHealthKit buildISO8601StringFromDate:endDate];
+//            NSString *startDateString = [RCTAppleHealthKit buildISO8601StringFromDate:startDate];
+//            NSString *endDateString = [RCTAppleHealthKit buildISO8601StringFromDate:endDate];
 //
 //
 //            NSMutableDictionary *elem = [NSMutableDictionary dictionary];

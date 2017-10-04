@@ -92,9 +92,11 @@
 + (NSDate *)startDateFromOptions:(NSDictionary *)options {
     NSString *dateString = [options objectForKey:@"startDate"];
     NSDate *date;
+    NSCalendar *calendar = [NSCalendar currentCalendar];
     if(dateString != nil){
         date = [RCTAppleHealthKit parseISO8601DateFromString:dateString];
-        return date;
+        date = [calendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
+        NSLog(@"dateFromOptions %@ into %@", dateString, date);
     }
     return date;
 }
