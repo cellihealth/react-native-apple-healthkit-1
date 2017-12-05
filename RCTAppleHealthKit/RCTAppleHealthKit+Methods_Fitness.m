@@ -305,4 +305,70 @@
   }];
 }
 
+- (void)fitness_getDailyAppleExerciseTime:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback
+{
+    if (NSFoundationVersionNumber <= NSFoundationVersionNumber_iOS_9_3) return;
+
+    HKUnit *unit = [RCTAppleHealthKit hkUnitFromOptions:input key:@"unit" withDefault:[HKUnit minuteUnit]];
+    NSUInteger limit = [RCTAppleHealthKit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
+    BOOL ascending = [RCTAppleHealthKit boolFromOptions:input key:@"ascending" withDefault:false];
+    NSDate *startDate = [RCTAppleHealthKit startDateFromOptions:input];
+    NSDate *endDate = [RCTAppleHealthKit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
+    if(startDate == nil){
+        callback(@[RCTMakeError(@"startDate is required in options", nil, nil)]);
+        return;
+    }
+
+    HKSampleType *sampleType = [HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierAppleExerciseTime];
+    NSPredicate *queryPredicate = [HKSampleQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionNone];
+    
+    [self fetchCumulativeSumStatisticsCollection:sampleType
+                                       predicate:queryPredicate
+                                            unit:unit
+                                       startDate:startDate
+                                         endDate:endDate
+                                       ascending:ascending
+                                           limit:limit
+                                      completion:^(NSArray *arr, NSError *err){
+                                          if (err != nil) {
+                                              NSLog(@"error with fetchCumulativeSumStatisticsCollection: %@", err);
+                                              callback(@[RCTMakeError(@"error with fetchCumulativeSumStatisticsCollection", err, nil)]);
+                                              return;
+                                          }
+                                          callback(@[[NSNull null], arr]);
+                                      }];
+}
+
+- (void)fitness_getDailyActiveEnergyBurned:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback
+{
+    HKUnit *unit = [RCTAppleHealthKit hkUnitFromOptions:input key:@"unit" withDefault:[HKUnit calorieUnit]];
+    NSUInteger limit = [RCTAppleHealthKit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
+    BOOL ascending = [RCTAppleHealthKit boolFromOptions:input key:@"ascending" withDefault:false];
+    NSDate *startDate = [RCTAppleHealthKit startDateFromOptions:input];
+    NSDate *endDate = [RCTAppleHealthKit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
+    if(startDate == nil){
+        callback(@[RCTMakeError(@"startDate is required in options", nil, nil)]);
+        return;
+    }
+    
+    HKSampleType *sampleType = [HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned];
+    NSPredicate *queryPredicate = [HKSampleQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionNone];
+    
+    [self fetchCumulativeSumStatisticsCollection:sampleType
+                                       predicate:queryPredicate
+                                            unit:unit
+                                       startDate:startDate
+                                         endDate:endDate
+                                       ascending:ascending
+                                           limit:limit
+                                      completion:^(NSArray *arr, NSError *err){
+                                          if (err != nil) {
+                                              NSLog(@"error with fetchCumulativeSumStatisticsCollection: %@", err);
+                                              callback(@[RCTMakeError(@"error with fetchCumulativeSumStatisticsCollection", err, nil)]);
+                                              return;
+                                          }
+                                          callback(@[[NSNull null], arr]);
+                                      }];
+}
+
 @end

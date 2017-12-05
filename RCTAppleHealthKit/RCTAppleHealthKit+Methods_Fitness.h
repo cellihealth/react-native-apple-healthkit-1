@@ -23,4 +23,7 @@
 - (void)fitness_getDistanceCyclingOnDay:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback;
 - (void)fitness_getFlightsClimbedOnDay:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback;
 
+- (void)fitness_getDailyAppleExerciseTime:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback;
+- (void)fitness_getDailyActiveEnergyBurned:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback;
+
 @end

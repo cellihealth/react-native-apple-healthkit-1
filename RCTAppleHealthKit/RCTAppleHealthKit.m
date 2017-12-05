@@ -125,6 +125,16 @@ RCT_EXPORT_METHOD(getDailyStepCountSamples2:(NSDictionary *)input callback:(RCTR
     [self fitness_getDailyStepSamples2:input callback:callback];
 }
 
+RCT_EXPORT_METHOD(getDailyAppleExerciseTime:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
+{
+    [self fitness_getDailyAppleExerciseTime:input callback:callback];
+}
+
+RCT_EXPORT_METHOD(getDailyActiveEnergyBurned:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
+{
+    [self fitness_getDailyActiveEnergyBurned:input callback:callback];
+}
+
 RCT_EXPORT_METHOD(saveSteps:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback)
 {
     [self fitness_saveSteps:input callback:callback];
