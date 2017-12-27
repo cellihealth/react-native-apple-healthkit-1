@@ -523,7 +523,7 @@
             }
         }
 
-        NSLog(@"data: %@", data);
+        
 
         if(asc == false) {
             [RCTAppleHealthKit reverseNSMutableArray:data];
