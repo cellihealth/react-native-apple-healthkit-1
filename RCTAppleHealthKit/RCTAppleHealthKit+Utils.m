@@ -17,6 +17,7 @@
 {
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     NSLocale *posix = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+    
     dateFormatter.locale = posix;
     dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZ";
     return [dateFormatter dateFromString:date];
@@ -92,11 +93,9 @@
 + (NSDate *)startDateFromOptions:(NSDictionary *)options {
     NSString *dateString = [options objectForKey:@"startDate"];
     NSDate *date;
-    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
     if(dateString != nil){
         date = [RCTAppleHealthKit parseISO8601DateFromString:dateString];
-        date = [calendar dateBySettingHour:0 minute:0 second:0 ofDate:date options:0];
-        NSLog(@"dateFromOptions %@ into %@", dateString, date);
     }
     return date;
 }

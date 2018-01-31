@@ -42,8 +42,6 @@
 - (void)fetchCumulativeSumStatisticsCollection:(HKSampleType *)sampleType
                                      predicate:(NSPredicate *)predicate
                                           unit:(HKUnit *)unit
-                                     startDate:(NSDate *)startDate
-                                       endDate:(NSDate *)endDate
                                      ascending:(BOOL)asc
                                          limit:(NSUInteger)lim
                                     completion:(void (^)(NSArray *, NSError *))completionHandler;

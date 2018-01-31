@@ -279,7 +279,7 @@
     NSUInteger limit = [RCTAppleHealthKit uintFromOptions:input key:@"limit" withDefault:HKObjectQueryNoLimit];
     BOOL ascending = [RCTAppleHealthKit boolFromOptions:input key:@"ascending" withDefault:false];
     NSDate *startDate = [RCTAppleHealthKit startDateFromOptions:input];
-    NSDate *endDate = [RCTAppleHealthKit dateFromOptions:input key:@"endDate" withDefault:[NSDate date]];
+    NSDate *endDate = [RCTAppleHealthKit endDateFromOptionsDefaultNow:input];
     if(startDate == nil){
         callback(@[RCTMakeError(@"startDate is required in options", nil, nil)]);
         return;
@@ -288,11 +288,11 @@
     HKSampleType *stepCountType = [HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
     NSPredicate *queryPredicate = [HKSampleQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionNone];
     
+    NSLog(@"fetchCumulativeSumStatisticsCollection startDate: %@ endDate: %@", startDate, endDate);
+
     [self fetchCumulativeSumStatisticsCollection:stepCountType
                                        predicate:queryPredicate
                                             unit:unit
-                                       startDate:startDate
-                                         endDate:endDate
                                        ascending:ascending
                                            limit:limit
                                       completion:^(NSArray *arr, NSError *err){
@@ -325,8 +325,6 @@
     [self fetchCumulativeSumStatisticsCollection:sampleType
                                        predicate:queryPredicate
                                             unit:unit
-                                       startDate:startDate
-                                         endDate:endDate
                                        ascending:ascending
                                            limit:limit
                                       completion:^(NSArray *arr, NSError *err){
@@ -357,8 +355,6 @@
     [self fetchCumulativeSumStatisticsCollection:sampleType
                                        predicate:queryPredicate
                                             unit:unit
-                                       startDate:startDate
-                                         endDate:endDate
                                        ascending:ascending
                                            limit:limit
                                       completion:^(NSArray *arr, NSError *err){
