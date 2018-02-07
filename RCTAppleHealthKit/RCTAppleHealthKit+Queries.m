@@ -449,6 +449,7 @@
                                           unit:(HKUnit *)unit
                                      ascending:(BOOL)asc
                                          limit:(NSUInteger)lim
+                                       groupBy:(NSString *)grpby
                                     completion:(void (^)(NSArray *, NSError *))completionHandler {
 
     NSLog(@"fetchCumulativeSumStatisticsCollection with HKSampleQuery with predicate: %@", [predicate predicateFormat]);
@@ -464,12 +465,27 @@
 
         NSMutableArray *data = [[NSMutableArray alloc] initWithCapacity:results.count];
         NSMutableDictionary *elema = [NSMutableDictionary dictionary];
-
+        
+        int group_by = 0;
+        if ([grpby isEqualToString:@"endDate"]) {
+            group_by = 1;
+            NSLog(@"Group by: %@", grpby);
+        } else {
+            NSLog(@"Group by (default): startDate");
+        }
+        
         for (HKSample *sample in results) {
             NSDateFormatter *format = [[NSDateFormatter alloc] init];
             [format setDateFormat:@"yyyy-MM-dd"];
-            NSString *kDate = [format stringFromDate:sample.startDate];
-
+            
+            NSString *kDate;
+            switch (group_by) {
+            case 1:
+                kDate = [format stringFromDate:sample.endDate]; break;
+            default:
+                kDate = [format stringFromDate:sample.startDate];
+            }
+    
 //            NSDate *startDate = sample.startDate;
 //            NSDate *endDate = sample.endDate;
 //            NSString *startDateString = [RCTAppleHealthKit buildISO8601StringFromDate:startDate];

@@ -44,6 +44,7 @@
                                           unit:(HKUnit *)unit
                                      ascending:(BOOL)asc
                                          limit:(NSUInteger)lim
+                                       groupBy:(NSString *)grpby
                                     completion:(void (^)(NSArray *, NSError *))completionHandler;
 
 

@@ -284,6 +284,7 @@
         callback(@[RCTMakeError(@"startDate is required in options", nil, nil)]);
         return;
     }
+    NSString *groupBy = [input objectForKey:@"groupBy"];
     
     HKSampleType *stepCountType = [HKSampleType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
     NSPredicate *queryPredicate = [HKSampleQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionNone];
@@ -295,6 +296,7 @@
                                             unit:unit
                                        ascending:ascending
                                            limit:limit
+                                         groupBy:groupBy
                                       completion:^(NSArray *arr, NSError *err){
       if (err != nil) {
           NSLog(@"error with fetchCumulativeSumStatisticsCollection: %@", err);
@@ -327,6 +329,7 @@
                                             unit:unit
                                        ascending:ascending
                                            limit:limit
+                                         groupBy:@"startDate"
                                       completion:^(NSArray *arr, NSError *err){
                                           if (err != nil) {
                                               NSLog(@"error with fetchCumulativeSumStatisticsCollection: %@", err);
@@ -357,6 +360,7 @@
                                             unit:unit
                                        ascending:ascending
                                            limit:limit
+                                         groupBy:@"startDate"
                                       completion:^(NSArray *arr, NSError *err){
                                           if (err != nil) {
                                               NSLog(@"error with fetchCumulativeSumStatisticsCollection: %@", err);
